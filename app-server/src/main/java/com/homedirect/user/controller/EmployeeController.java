@@ -36,7 +36,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    EmployeeModel get(@PathVariable Long id, HttpServletRequest httpServletRequest) {
+    EmployeeModel get(@PathVariable Long id, HttpServletRequest httpServletRequest) throws Exception {
         return service.get(id);
     }
 

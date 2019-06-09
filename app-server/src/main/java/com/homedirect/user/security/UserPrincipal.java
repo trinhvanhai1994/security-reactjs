@@ -1,7 +1,7 @@
 package com.homedirect.user.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.homedirect.user.entity.User;
+import com.homedirect.user.entity.Account;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,7 +36,7 @@ public class UserPrincipal implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserPrincipal create(User user) {
+    public static UserPrincipal create(Account user) {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
                 new SimpleGrantedAuthority(role.getName().name())
         ).collect(Collectors.toList());

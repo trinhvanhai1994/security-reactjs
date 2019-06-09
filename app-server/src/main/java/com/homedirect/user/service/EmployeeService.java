@@ -11,7 +11,7 @@ public interface EmployeeService {
 
     List<EmployeeModel> all();
     EmployeeModel create(EmployeeModel model);
-    EmployeeModel get(Long id);
+    EmployeeModel get(Long id) throws Exception;
     EmployeeModel update(Long id, EmployeeModel model);
     void delete(Long id);
 }
