@@ -1,22 +1,22 @@
 package com.homedirect.user.security;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.homedirect.user.entity.Account;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.homedirect.user.entity.Account;
+import com.homedirect.user.entity.Employee;
 
-public class UserPrincipal implements UserDetails {
+public class AccountPrincipal implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-    private Long employeeId;
+    private Employee employee;
     private String username;
 
     @JsonIgnore
@@ -27,23 +27,23 @@ public class UserPrincipal implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrincipal(Long id, Long employeeId, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public AccountPrincipal(Long id, Employee employee, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
-        this.employeeId = employeeId;
+        this.employee = employee;
         this.username = username;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
     }
 
-    public static UserPrincipal create(Account user) {
+    public static AccountPrincipal create(Account user) {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
                 new SimpleGrantedAuthority(role.getName().name())
         ).collect(Collectors.toList());
 
-        return new UserPrincipal(
+        return new AccountPrincipal(
                 user.getId(),
-                user.getEmployeeId(),
+                user.getEmployee(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
@@ -55,8 +55,8 @@ public class UserPrincipal implements UserDetails {
         return id;
     }
 
-    public Long getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
     public String getEmail() {
@@ -96,18 +96,5 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserPrincipal that = (UserPrincipal) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

@@ -14,16 +14,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.homedirect.user.entity.Account;
+import com.homedirect.user.entity.Employee;
 import com.homedirect.user.entity.Role;
 import com.homedirect.user.exception.AppException;
 import com.homedirect.user.model.ApiResponse;
-import com.homedirect.user.model.JwtAuthenticationResponse;
+import com.homedirect.user.model.TokenResponse;
 import com.homedirect.user.model.LoginRequest;
 import com.homedirect.user.model.SignUpRequest;
 import com.homedirect.user.repository.AccountRepository;
 import com.homedirect.user.repository.RoleRepository;
 import com.homedirect.user.security.JwtTokenProvider;
 import com.homedirect.user.service.AuthService;
+import com.homedirect.user.service.EmployeeService;
 import com.homedirect.user.transformer.AccountTransformer;
 import com.homedirect.user.util.RoleName;
 import com.homedirect.user.validator.AccountValidator;
@@ -35,6 +37,8 @@ public class AuthServiceImpl implements AuthService {
     private @Autowired AccountRepository accountRepository;
     private @Autowired AccountTransformer transformer;
     private @Autowired AccountValidator validator;
+    
+    private @Autowired EmployeeService employeeService;
     
     private @Autowired RoleRepository roleRepository;
     private @Autowired PasswordEncoder passwordEncoder;
@@ -53,14 +57,16 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        return ResponseEntity.ok(new TokenResponse(jwt));
 	}
 
 	@Override
 	public ResponseEntity<?> signUp(SignUpRequest request) throws Exception {
 		validator.validateCreate(request);
 		
-        Account account = transformer.toEntity(request);
+		Employee employee = employeeService.create(request);
+		
+        Account account = transformer.toEntity(request, employee);
 
         account.setPassword(passwordEncoder.encode(account.getPassword()));
 

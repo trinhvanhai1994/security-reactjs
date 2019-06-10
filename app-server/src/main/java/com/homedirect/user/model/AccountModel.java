@@ -2,10 +2,13 @@ package com.homedirect.user.model;
 
 import java.util.Date;
 
-public class Profile {
+public class AccountModel {
+	
     private Long id;
-    private EmployeeModel employee;
     private String username;
+    private String password;
+    private String email;
+    private EmployeeModel employee;
     private Date created;
 
     public Long getId() {
@@ -16,7 +19,23 @@ public class Profile {
         this.id = id;
     }
 
-    public String getUsername() {
+    public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getUsername() {
         return username;
     }
 

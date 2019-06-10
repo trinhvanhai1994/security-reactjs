@@ -8,7 +8,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.homedirect.user.security.UserPrincipal;
+import com.homedirect.user.security.AccountPrincipal;
 
 import java.util.Optional;
 
@@ -34,7 +34,7 @@ class SpringSecurityAuditAwareImpl implements AuditorAware<Long> {
             return Optional.empty();
         }
 
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        AccountPrincipal userPrincipal = (AccountPrincipal) authentication.getPrincipal();
 
         return Optional.ofNullable(userPrincipal.getId());
     }

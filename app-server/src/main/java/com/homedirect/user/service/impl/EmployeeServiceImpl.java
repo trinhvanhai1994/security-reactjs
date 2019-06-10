@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.homedirect.user.entity.Account;
 import com.homedirect.user.entity.Employee;
 import com.homedirect.user.model.EmployeeModel;
+import com.homedirect.user.model.SignUpRequest;
 import com.homedirect.user.repository.EmployeeRepository;
 import com.homedirect.user.service.EmployeeService;
 import com.homedirect.user.transformer.EmployeeTransformer;
@@ -25,28 +25,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public EmployeeModel create(EmployeeModel model) {
-		Employee entity = transformer.toEntity(model);
-		repo.save(entity);
-		return transformer.toModel(entity);
+	public Employee create(SignUpRequest request) {
+		Employee entity = transformer.toEntity(request);
+		return repo.save(entity);
 	}
-
+	
 	@Override
-	public EmployeeModel get(Long id) throws Exception {
-		Employee entity = repo.findById(id)
-				.orElseThrow(() -> new Exception("Khong tim thay thong tin nhan vien!"));
-		return transformer.toModel(entity);
-	}
-
-	@Override
-	public EmployeeModel update(Long id, EmployeeModel model) {
-		Employee entity = repo.findById(id).get();
-		transformer.update(entity, model);
-		return transformer.toModel(entity);
-	}
-
-	@Override
-	public void delete(Long id) {
-		repo.deleteById(id);
+	public Employee update(EmployeeModel model) {
+		Employee entity = transformer.update(model);;
+		return repo.save(entity);
 	}
 }

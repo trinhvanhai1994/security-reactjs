@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.homedirect.user.entity.Employee;
 import com.homedirect.user.model.EmployeeModel;
+import com.homedirect.user.model.SignUpRequest;
 
 @Service
 public interface EmployeeService {
 
     List<EmployeeModel> all();
-    EmployeeModel create(EmployeeModel model);
-    EmployeeModel get(Long id) throws Exception;
-    EmployeeModel update(Long id, EmployeeModel model);
-    void delete(Long id);
+    Employee create(SignUpRequest request);
+    Employee update(EmployeeModel model);
 }

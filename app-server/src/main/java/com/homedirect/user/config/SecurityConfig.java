@@ -20,11 +20,6 @@ import com.homedirect.user.security.CustomUserDetailsService;
 import com.homedirect.user.security.JwtAuthenticationEntryPoint;
 import com.homedirect.user.security.JwtAuthenticationFilter;
 
-
-/**
- * Created by rajeevkumarsingh on 01/08/17.
- */
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -91,13 +86,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .permitAll()
                     .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability") 
                         .permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/employees/**", "/api/users/**")
+                    .antMatchers(HttpMethod.GET, "/api/accounts/**", "/api/users/**")
                         .permitAll()
                     .anyRequest()
                         .authenticated();
 
         // Add our custom JWT security filter
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
     }
 }

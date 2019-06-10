@@ -12,8 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -21,23 +21,16 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
-@Table(name = "account", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {
-            "username"
-        }),
-        @UniqueConstraint(columnNames = {
-            "email"
-        })
-})
+@Table(name = "account")
 public class Account {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 40)
-    private Long employeeId;
+    @OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "employee_id")
+	private Employee employee;
     
     @NaturalId
     @NotBlank
@@ -55,22 +48,11 @@ public class Account {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
+            joinColumns = @JoinColumn(name = "account_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
     
     private Date created;
-
-    public Account() {
-
-    }
-
-    public Account(Long employeeId, String username, String email, String password) {
-        this.employeeId = employeeId;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
 
     public Long getId() {
         return id;
@@ -108,12 +90,12 @@ public class Account {
         return roles;
     }
 
-    public Long getEmployeeId() {
-		return employeeId;
+	public Employee getEmployee() {
+		return employee;
 	}
 
-	public void setEmployeeId(Long employeeId) {
-		this.employeeId = employeeId;
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 
 	public Date getCreated() {
