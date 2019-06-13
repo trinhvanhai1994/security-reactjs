@@ -11,7 +11,6 @@
 /Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/config/AuditingConfig.java
 /Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/exception/ResourceNotFoundException.java
 /Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/entity/Employee.java
-/Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/model/JwtAuthenticationResponse.java
 /Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/security/AccountPrincipal.java
 /Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/service/AccountService.java
 /Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/validator/AccountValidator.java
@@ -25,6 +24,7 @@
 /Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/config/SecurityConfig.java
 /Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/security/CurrentUser.java
 /Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/model/ApiResponse.java
+/Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/model/TokenResponse.java
 /Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/service/impl/AccountServiceImpl.java
 /Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/repository/EmployeeRepository.java
 /Users/trinhvanhai/Documents/spring-security-reactjs/security-reactjs/app-server/src/main/java/com/homedirect/user/service/impl/EmployeeServiceImpl.java

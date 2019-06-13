@@ -2,32 +2,38 @@ package com.homedirect.user.model;
 
 import java.math.BigDecimal;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class SignUpRequest {
 	
-    @NotBlank
     @Size(min = 1, max = 40)
+    @NotNull(message = "account.name.not-null")
     private String name;
     
-    @NotBlank
     @Size(min = 1, max = 40)
+    @NotNull(message = "account.phone.not-null")
     private String phone;
     
     @DecimalMax("3000000000.00")
+    @NotNull(message = "account.salary.not-null")
     private BigDecimal salary;
 
-    @NotBlank
     @Size(min = 3, max = 15)
+    @NotNull(message = "account.username.not-null")
     private String username;
+    
+    private String roleName;
 
-    @NotBlank
-    @Size(max = 40)
     @Email
+    @Size(max = 40)
+    @NotNull(message = "account.email.not-null")
     private String email;
 
-    @NotBlank
     @Size(min = 6, max = 20)
+    @NotNull(message = "account.password.not-null")
     private String password;
 
     public String getUsername() {
@@ -76,5 +82,13 @@ public class SignUpRequest {
 
 	public void setSalary(BigDecimal salary) {
 		this.salary = salary;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
 }

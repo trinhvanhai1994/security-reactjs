@@ -13,5 +13,5 @@ public interface EmployeeService {
 
     List<EmployeeModel> all();
     Employee create(SignUpRequest request);
-    Employee update(EmployeeModel model);
+    Employee update(Employee entity, EmployeeModel model);
 }

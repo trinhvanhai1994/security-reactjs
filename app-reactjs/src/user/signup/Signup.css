@@ -1,21 +1,21 @@
-.signup-container {
+.sign-up-container {
     max-width: 420px;
     margin: 0 auto;
     margin-top: 40px;    
 }
 
-.signup-form-button {
+.sign-up-form-button {
     width: 100%;
     margin-top: 15px;
 }
 
-.signup-form-button[disabled], .signup-form-button[disabled]:hover, .signup-form-button[disabled]:focus {
+.sign-up-form-button[disabled], .sign-up-form-button[disabled]:hover, .sign-up-form-button[disabled]:focus {
     opacity: 0.6;
     color: #fff;
     background-color: #1890ff;
     border-color: #1890ff;
 }
 
-.signup-form input {
+.sign-up-form input {
     margin-bottom: 3px;
 }

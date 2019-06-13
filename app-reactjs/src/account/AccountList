@@ -1,0 +1,95 @@
+import React, { Component } from 'react';
+import { getListAccount } from '../util/APIUtils';
+import LoadingIndicator  from '../common/LoadingIndicator';
+import './Profile.css';
+import NotFound from '../common/NotFound';
+import ServerError from '../common/ServerError';
+
+class AccountList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            account: null,
+            isLoading: false
+        }
+        this.loadAccountList = this.loadAccountList.bind(this);
+    }
+
+    loadAccountList() {
+        this.setState({
+            isLoading: true
+        });
+
+        getListAccount()
+            .then(response => {
+                console.log(response);
+                this.setState({
+                    account: response,
+                    isLoading: false
+                });
+            }).catch(error => {
+            if(error.status === 404) {
+                this.setState({
+                    notFound: true,
+                    isLoading: false
+                });
+            } else {
+                this.setState({
+                    serverError: true,
+                    isLoading: false
+                });
+            }
+        });
+    }
+
+    componentDidMount() {
+        this.loadAccountList();
+    }
+
+    componentDidUpdate(nextProps) {
+        if(this.props.match !== nextProps.match.params.username) {
+            this.loadUserProfile(nextProps.match.params.username);
+        }
+    }
+
+    render() {
+
+        console.log(this.state.account);
+        if(this.state.isLoading) {
+            return <LoadingIndicator />;
+        }
+
+        if(this.state.notFound) {
+            return <NotFound />;
+        }
+
+        if(this.state.serverError) {
+            return <ServerError />;
+        }
+
+        console.log(this.state.account);
+        return (
+            <div className="profile">
+                {
+                    this.state.account ? (
+
+                        <div className="user-profile">
+                            <div >
+                                <div className="user-summary">
+                                    <div className="username">Username : {this.state.account.username}</div>
+                                    <div className="username">Email : {this.state.account.email}</div>
+                                    <div className="full-name">FullName : {this.state.account.employee.name}</div>
+                                    <div className="username">Phone : {this.state.account.employee.phone}</div>
+                                    <div className="username">Salary : {this.state.account.employee.salary}</div>
+                                    <div className="username">Role : {this.state.account.employee.role}</div>
+                                </div>
+                            </div>
+                        </div>
+                    ): null
+                }
+            </div>
+        );
+    }
+}
+
+export default AccountList;

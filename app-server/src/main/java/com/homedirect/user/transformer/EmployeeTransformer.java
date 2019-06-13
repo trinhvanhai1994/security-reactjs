@@ -29,18 +29,22 @@ public class EmployeeTransformer {
 		model.setName(entity.getName());
 		model.setPhone(entity.getPhone());
 		model.setSalary(entity.getSalary());
-//		model.setCreated(entity.getCreated().getTime());
-
+		if (entity.getCreated() != null) {
+			model.setCreated(entity.getCreated().getTime());
+		}
+		
 		return model;
 	}
 
-	public Employee update(EmployeeModel model) {
-		Employee entity = new Employee();
-		
-		entity.setName(model.getName());
-		entity.setPhone(model.getPhone());
-		entity.setSalary(model.getSalary());
-		
-		return entity;
+	public void update(Employee entity, EmployeeModel model) {
+		if (model.getName() != null) {
+			entity.setName(model.getName());
+		}
+		if (model.getPhone() != null) {
+			entity.setPhone(model.getPhone());
+		}
+		if (model.getSalary() != null) {
+			entity.setSalary(model.getSalary());
+		}
 	}
 }

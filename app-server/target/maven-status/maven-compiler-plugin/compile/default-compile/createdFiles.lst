@@ -15,6 +15,7 @@ com/homedirect/user/model/SignUpRequest.class
 com/homedirect/user/entity/Account.class
 com/homedirect/user/service/impl/EmployeeServiceImpl.class
 com/homedirect/user/security/AccountPrincipal.class
+com/homedirect/user/model/TokenResponse.class
 com/homedirect/user/security/JwtAuthenticationFilter.class
 com/homedirect/user/controller/AuthController.class
 com/homedirect/user/model/ApiResponse.class

@@ -21,19 +21,19 @@ public class AccountServiceImpl implements AccountService {
 	private @Autowired AccountTransformer transformer;
 	private @Autowired AccountRepository repo;
 	
-	private Account get(String username) throws NotFoundException {
+	private Account getByUsername(String username) throws NotFoundException {
 		return repo.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("Khong tim thay tai khoan voi ten: " + username));
 	}
 	
-	private Account get(Long id) throws NotFoundException {
+	private Account getById(Long id) throws NotFoundException {
 		return repo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Khong tim thay tai khoan voi ID: " + id));
 	}
 	
 	@Override
 	public AccountModel getProfile(String username) throws Exception {
-		return transformer.toModel(get(username));
+		return transformer.toModel(getByUsername(username));
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public AccountModel edit(Long id, AccountModel model) throws Exception {
-		Account entity = get(id);
+		Account entity = getById(id);
 		transformer.update(model, entity);
 		repo.save(entity);
 		return transformer.toModel(entity);
@@ -61,12 +61,12 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public void delete(Long id) throws Exception {
-		Account entity = get(id);
+		Account entity = getById(id);
 		repo.delete(entity);
 	}
 
 	@Override
 	public List<AccountModel> all() {
-		return repo.findAll().stream().map(transformer::toModel).collect(Collectors.toList());
+		return repo.findAllMember().stream().map(transformer::toModel).collect(Collectors.toList());
 	}
 }

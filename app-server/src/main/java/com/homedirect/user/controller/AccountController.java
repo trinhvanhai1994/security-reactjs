@@ -25,7 +25,6 @@ public class AccountController {
     private @Autowired AccountService service;
 
     @GetMapping("/user/profile")
-    @PreAuthorize("hasRole('USER')")
     public AccountModel getCurrentUser(@CurrentUser AccountPrincipal currentUser) {
        return service.getCurrentAccount(currentUser);
     }
@@ -46,19 +45,19 @@ public class AccountController {
     }
     
     @PutMapping("/accounts/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('LEADER')")
     public AccountModel update(@PathVariable Long id, @RequestBody AccountModel model) throws Exception {
     	return service.edit(id, model);
     }
     
     @DeleteMapping("/accounts/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('LEADER')")
     public void delete(@PathVariable Long id) throws Exception {
     	service.delete(id);
     }
     
     @GetMapping("/accounts/all")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('LEADER')")
     public List<AccountModel> all() {
     	return service.all();
     }

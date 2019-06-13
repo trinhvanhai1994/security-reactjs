@@ -39,12 +39,12 @@ class LoginForm extends Component {
                 }).catch(error => {
                     if(error.status === 401) {
                         notification.error({
-                            message: 'Polling App',
+                            message: 'Account App',
                             description: 'Your Username or Password is incorrect. Please try again!'
                         });                    
                     } else {
                         notification.error({
-                            message: 'Polling App',
+                            message: 'Account App',
                             description: error.message || 'Sorry! Something went wrong. Please try again!'
                         });                                            
                     }
@@ -82,7 +82,7 @@ class LoginForm extends Component {
                 </FormItem>
                 <FormItem>
                     <Button type="primary" htmlType="submit" size="large" className="login-form-button">Login</Button>
-                    Or <Link to="/signup">register now!</Link>
+                    Or <Link to="/sign-up">register now!</Link>
                 </FormItem>
             </Form>
         );

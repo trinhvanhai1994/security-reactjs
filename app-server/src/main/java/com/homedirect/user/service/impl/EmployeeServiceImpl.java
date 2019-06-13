@@ -31,8 +31,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	@Override
-	public Employee update(EmployeeModel model) {
-		Employee entity = transformer.update(model);;
+	public Employee update(Employee entity, EmployeeModel model) {
+		transformer.update(entity, model);
 		return repo.save(entity);
 	}
 }

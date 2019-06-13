@@ -7,17 +7,14 @@ import {
 } from 'react-router-dom';
 
 import { getCurrentUser } from '../util/APIUtils';
-import { ACCESS_TOKEN } from '../constants';
-
-import PollList from '../poll/PollList';
-import NewPoll from '../poll/NewPoll';
+import {getListAccount} from '../util/APIUtils';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
+import { ACCESS_TOKEN } from '../constants';
 import Profile from '../user/profile/Profile';
+import AccountList from '../account/AccountList'
 import AppHeader from '../common/AppHeader';
-import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
-import PrivateRoute from '../common/PrivateRoute';
 
 import { Layout, notification } from 'antd';
 const { Content } = Layout;
@@ -27,11 +24,13 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: null,
+      accountList: null,
       isAuthenticated: false,
       isLoading: false
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
+    // this.loadAccountList = this.loadAccountList().bind(this);
     this.handleLogin = this.handleLogin.bind(this);
 
     notification.config({
@@ -55,12 +54,31 @@ class App extends Component {
     }).catch(error => {
       this.setState({
         isLoading: false
-      });  
+      });
+    });
+  }
+
+  loadAccountList() {
+    this.setState({
+      isLoading: true
+    });
+    getListAccount()
+        .then(response => {
+          this.setState({
+            accountList: response,
+            isAuthenticated: true,
+            isLoading: false
+          });
+        }).catch(error => {
+      this.setState({
+        isLoading: false
+      });
     });
   }
 
   componentDidMount() {
     this.loadCurrentUser();
+    this.loadAccountList();
   }
 
   handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
@@ -68,23 +86,25 @@ class App extends Component {
 
     this.setState({
       currentUser: null,
+      accountList: null,
       isAuthenticated: false
     });
 
     this.props.history.push(redirectTo);
     
     notification[notificationType]({
-      message: 'Polling App',
+      message: 'Account App',
       description: description,
     });
   }
 
   handleLogin() {
     notification.success({
-      message: 'Polling App',
+      message: 'Account App',
       description: "You're successfully logged in.",
     });
     this.loadCurrentUser();
+    this.loadAccountList();
     this.props.history.push("/");
   }
 
@@ -92,27 +112,29 @@ class App extends Component {
     if(this.state.isLoading) {
       return <LoadingIndicator />
     }
+
     return (
         <Layout className="app-container">
           <AppHeader isAuthenticated={this.state.isAuthenticated} 
-            currentUser={this.state.currentUser} 
+            currentUser={this.state.currentUser}
+            accountList={this.state.accountList}
             onLogout={this.handleLogout} />
 
           <Content className="app-content">
             <div className="container">
-              <Switch>      
-                <Route exact path="/" 
-                  render={(props) => <PollList isAuthenticated={this.state.isAuthenticated} 
-                      currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>
+              <Switch>
+                <Route path="accounts/all"
+                  render={(props) => <AccountList isAuthenticated={this.state.isAuthenticated} {...props}  />}>
                 </Route>
-                <Route path="/login" 
-                  render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
-                <Route path="/signup" component={Signup}></Route>
-                <Route path="/users/:username" 
+                <Route path="/users/:username"
+                       render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
+                </Route>
+                <Route path="/login"
+                  render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
+                <Route path="/sign-up" component={Signup}/>
+                <Route path="/users/:username"
                   render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
                 </Route>
-                <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new" component={NewPoll} handleLogout={this.handleLogout}></PrivateRoute>
-                <Route component={NotFound}></Route>
               </Switch>
             </div>
           </Content>

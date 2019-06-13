@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { 
     NAME_MIN_LENGTH, NAME_MAX_LENGTH, 
     USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH,
+    SALARY_MIN_LENGTH, SALARY_MAX_LENGTH,
     EMAIL_MAX_LENGTH,
     PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH
 } from '../../constants';
@@ -19,6 +20,15 @@ class Signup extends Component {
             name: {
                 value: ''
             },
+            phone: {
+                value: ''
+            },
+            salary: {
+                value: ''
+            },
+            role: {
+                value: ''
+            },
             username: {
                 value: ''
             },
@@ -28,7 +38,8 @@ class Signup extends Component {
             password: {
                 value: ''
             }
-        }
+        };
+
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.validateUsernameAvailability = this.validateUsernameAvailability.bind(this);
@@ -54,20 +65,24 @@ class Signup extends Component {
     
         const signupRequest = {
             name: this.state.name.value,
+            phone: this.state.phone.value,
+            salary: this.state.salary.value,
+            role: this.state.role.value,
             email: this.state.email.value,
             username: this.state.username.value,
             password: this.state.password.value
         };
+
         signup(signupRequest)
         .then(response => {
             notification.success({
-                message: 'Polling App',
+                message: 'Account App',
                 description: "Thank you! You're successfully registered. Please Login to continue!",
             });          
             this.props.history.push("/login");
         }).catch(error => {
             notification.error({
-                message: 'Polling App',
+                message: 'Account App',
                 description: error.message || 'Sorry! Something went wrong. Please try again!'
             });
         });
@@ -75,6 +90,7 @@ class Signup extends Component {
 
     isFormInvalid() {
         return !(this.state.name.validateStatus === 'success' &&
+            this.state.salary.validateStatus === 'success' &&
             this.state.username.validateStatus === 'success' &&
             this.state.email.validateStatus === 'success' &&
             this.state.password.validateStatus === 'success'
@@ -83,34 +99,72 @@ class Signup extends Component {
 
     render() {
         return (
-            <div className="signup-container">
+            <div className="sign-up-container">
                 <h1 className="page-title">Sign Up</h1>
-                <div className="signup-content">
-                    <Form onSubmit={this.handleSubmit} className="signup-form">
+                <div className="sign-up-content">
+                    <Form onSubmit={this.handleSubmit} className="sign-up-form">
                         <FormItem 
-                            label="Full Name"
+                            label="Employee Name"
                             validateStatus={this.state.name.validateStatus}
                             help={this.state.name.errorMsg}>
                             <Input 
                                 size="large"
                                 name="name"
                                 autoComplete="off"
-                                placeholder="Your full name"
+                                placeholder="Employee name"
                                 value={this.state.name.value} 
                                 onChange={(event) => this.handleInputChange(event, this.validateName)} />    
                         </FormItem>
-                        <FormItem label="Username"
+                        <FormItem label="Phone"
                             hasFeedback
-                            validateStatus={this.state.username.validateStatus}
-                            help={this.state.username.errorMsg}>
+                            validateStatus={this.state.phone.validateStatus}
+                            help={this.state.phone.errorMsg}>
                             <Input 
                                 size="large"
-                                name="username" 
+                                name="phone"
+                                autoComplete="off"
+                                placeholder="Employee phone"
+                                value={this.state.phone.value}
+                                onChange={(event) => this.handleInputChange(event, this.validateUsername)} />
+                        </FormItem>
+                        <FormItem label="Salary"
+                                  hasFeedback
+                                  validateStatus={this.state.salary.validateStatus}
+                                  help={this.state.salary.errorMsg}>
+                            <Input
+                                size="large"
+                                name="salary"
+                                autoComplete="off"
+                                placeholder="Employee salary"
+                                value={this.state.salary.value}
+                                onChange={(event) => this.handleInputChange(event, this.validateSalary)} />
+                        </FormItem>
+                        <FormItem label="Role"
+                                  hasFeedback
+                                  validateStatus={this.state.role.validateStatus}
+                                  help={this.state.role.errorMsg}>
+                            <Input
+                                size="large"
+                                name="role"
+                                autoComplete="off"
+                                placeholder="Employee role"
+                                value={this.state.role.value}
+                                onChange={(event) => this.handleInputChange(event, this.validateUsername)} />
+                            {/*<input type="checkbox" name="leader" value="LEADER" />*/}
+                            {/*<input type="checkbox" name="member" value="MEMBER" />*/}
+                        </FormItem>
+                        <FormItem label="Username"
+                                  hasFeedback
+                                  validateStatus={this.state.username.validateStatus}
+                                  help={this.state.username.errorMsg}>
+                            <Input
+                                size="large"
+                                name="username"
                                 autoComplete="off"
                                 placeholder="A unique username"
-                                value={this.state.username.value} 
+                                value={this.state.username.value}
                                 onBlur={this.validateUsernameAvailability}
-                                onChange={(event) => this.handleInputChange(event, this.validateUsername)} />    
+                                onChange={(event) => this.handleInputChange(event, this.validateUsername)} />
                         </FormItem>
                         <FormItem 
                             label="Email"
@@ -144,7 +198,7 @@ class Signup extends Component {
                             <Button type="primary" 
                                 htmlType="submit" 
                                 size="large" 
-                                className="signup-form-button"
+                                className="sign-up-form-button"
                                 disabled={this.isFormInvalid()}>Sign up</Button>
                             Already registed? <Link to="/login">Login now!</Link>
                         </FormItem>
@@ -217,7 +271,26 @@ class Signup extends Component {
             }
         } else {
             return {
-                validateStatus: null,
+                validateStatus: 'success',
+                errorMsg: null
+            }
+        }
+    }
+
+    validateSalary = (salary) => {
+        if(salary < SALARY_MIN_LENGTH) {
+            return {
+                validateStatus: 'error',
+                errorMsg: `Salary is too less than (Minimum ${SALARY_MIN_LENGTH})`
+            }
+        } else if (salary > SALARY_MAX_LENGTH) {
+            return {
+                validationStatus: 'error',
+                errorMsg: `Salary is too more than (Maximum ${SALARY_MAX_LENGTH})`
+            }
+        } else {
+            return {
+                validateStatus: 'success',
                 errorMsg: null
             }
         }

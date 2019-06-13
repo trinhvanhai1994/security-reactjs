@@ -18,9 +18,9 @@ import com.homedirect.user.entity.Employee;
 import com.homedirect.user.entity.Role;
 import com.homedirect.user.exception.AppException;
 import com.homedirect.user.model.ApiResponse;
-import com.homedirect.user.model.TokenResponse;
 import com.homedirect.user.model.LoginRequest;
 import com.homedirect.user.model.SignUpRequest;
+import com.homedirect.user.model.TokenResponse;
 import com.homedirect.user.repository.AccountRepository;
 import com.homedirect.user.repository.RoleRepository;
 import com.homedirect.user.security.JwtTokenProvider;
@@ -67,11 +67,16 @@ public class AuthServiceImpl implements AuthService {
 		Employee employee = employeeService.create(request);
 		
         Account account = transformer.toEntity(request, employee);
-
         account.setPassword(passwordEncoder.encode(account.getPassword()));
-
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new AppException("User Role not set."));
+        
+        Role userRole = null;
+        if (request.getRoleName().equals("LEADER")) {
+        	userRole = roleRepository.findByName(RoleName.ROLE_LEADER)
+                    .orElseThrow(() -> new AppException("User Role not set."));
+        } else {
+        	userRole = roleRepository.findByName(RoleName.ROLE_MEMBER)
+                    .orElseThrow(() -> new AppException("User Role not set."));
+		}
 
         account.setRoles(Collections.singleton(userRole));
 
@@ -81,6 +86,6 @@ public class AuthServiceImpl implements AuthService {
                 .fromCurrentContextPath().path("/users/{username}")
                 .buildAndExpand(result.getUsername()).toUri();
 
-        return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+        return ResponseEntity.created(location).body(new ApiResponse(true, "Account registered successfully"));
 	}
 }

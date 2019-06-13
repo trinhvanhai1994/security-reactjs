@@ -61,11 +61,20 @@ public class AccountTransformer {
 	
 	public Account update(AccountModel model, Account entity) {
 
+		Employee employee = employeeService.update(entity.getEmployee(), model.getEmployee());
+		
+		if (model.getUsername() != null) {
 		entity.setUsername(model.getUsername());
-		entity.setEmployee(employeeService.update(model.getEmployee()));
+		}
+		if (employee != null) {
+		entity.setEmployee(employee);
+		}
+		if (model.getEmail() != null) {
 		entity.setEmail(model.getEmail());
+		}
+		if (model.getPassword() != null) {
 		entity.setPassword(model.getPassword());
-		entity.setCreated(entity.getCreated());
+		}
 
 		return entity;
 	}

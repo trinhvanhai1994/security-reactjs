@@ -1,4 +1,4 @@
-import { API_BASE_URL, POLL_LIST_SIZE, ACCESS_TOKEN } from '../constants';
+import { API_BASE_URL, ACCESS_TOKEN } from '../constants';
 
 const request = (options) => {
     const headers = new Headers({
@@ -23,35 +23,9 @@ const request = (options) => {
     );
 };
 
-export function getAllPolls(page, size) {
-    page = page || 0;
-    size = size || POLL_LIST_SIZE;
-
-    return request({
-        url: API_BASE_URL + "/polls?page=" + page + "&size=" + size,
-        method: 'GET'
-    });
-}
-
-export function createPoll(pollData) {
-    return request({
-        url: API_BASE_URL + "/polls",
-        method: 'POST',
-        body: JSON.stringify(pollData)         
-    });
-}
-
-export function castVote(voteData) {
-    return request({
-        url: API_BASE_URL + "/polls/" + voteData.pollId + "/votes",
-        method: 'POST',
-        body: JSON.stringify(voteData)
-    });
-}
-
 export function login(loginRequest) {
     return request({
-        url: API_BASE_URL + "/auth/signin",
+        url: API_BASE_URL + "/auth/sign-in",
         method: 'POST',
         body: JSON.stringify(loginRequest)
     });
@@ -59,7 +33,7 @@ export function login(loginRequest) {
 
 export function signup(signupRequest) {
     return request({
-        url: API_BASE_URL + "/auth/signup",
+        url: API_BASE_URL + "/auth/sign-up",
         method: 'POST',
         body: JSON.stringify(signupRequest)
     });
@@ -67,18 +41,17 @@ export function signup(signupRequest) {
 
 export function checkUsernameAvailability(username) {
     return request({
-        url: API_BASE_URL + "/user/checkUsernameAvailability?username=" + username,
+        url: API_BASE_URL + "/user/exist-username?username=" + username,
         method: 'GET'
     });
 }
 
 export function checkEmailAvailability(email) {
     return request({
-        url: API_BASE_URL + "/user/checkEmailAvailability?email=" + email,
+        url: API_BASE_URL + "/user/exist-email?email=" + email,
         method: 'GET'
     });
 }
-
 
 export function getCurrentUser() {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
@@ -86,7 +59,7 @@ export function getCurrentUser() {
     }
 
     return request({
-        url: API_BASE_URL + "/user/me",
+        url: API_BASE_URL + "/user/profile",
         method: 'GET'
     });
 }
@@ -98,22 +71,24 @@ export function getUserProfile(username) {
     });
 }
 
-export function getUserCreatedPolls(username, page, size) {
-    page = page || 0;
-    size = size || POLL_LIST_SIZE;
-
+export function getListAccount() {
     return request({
-        url: API_BASE_URL + "/users/" + username + "/polls?page=" + page + "&size=" + size,
+        url: API_BASE_URL + "/accounts/all",
         method: 'GET'
     });
 }
 
-export function getUserVotedPolls(username, page, size) {
-    page = page || 0;
-    size = size || POLL_LIST_SIZE;
+// export function getUserProfile(username) {
+//     return request({
+//         url: API_BASE_URL + "/users/" + username,
+//         method: 'GET'
+//     });
+// }
+//
+// export function getUserProfile(username) {
+//     return request({
+//         url: API_BASE_URL + "/users/" + username,
+//         method: 'GET'
+//     });
+// }
 
-    return request({
-        url: API_BASE_URL + "/users/" + username + "/votes?page=" + page + "&size=" + size,
-        method: 'GET'
-    });
-}

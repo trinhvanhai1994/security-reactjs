@@ -12,12 +12,8 @@ public class AccountValidator {
 	private @Autowired AccountRepository repo;
 
 	public void validateCreate(SignUpRequest request) throws Exception {
-		if(repo.existsByUsername(request.getUsername())) {
-            throw new Exception("Exist Username!");
-        }
-
-        if(repo.existsByEmail(request.getEmail())) {
-        	throw new Exception("Exist Username!");
-        }
+		if(repo.findByUsernameOrEmail(request.getUsername(), request.getEmail()).isPresent()) {
+			throw new Exception("Exist Username or Email!");
+		}
 	}
 }
